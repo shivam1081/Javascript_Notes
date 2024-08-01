@@ -391,3 +391,148 @@ handlePromise().catch((err) => console.log(err));
 
 
 
+
+## 5. Promise APIs + Interview Questions
+
+### 1. Promise.all
+- Used to handle multiple APIs.
+- Takes an array of promises, calls all the APIs in parallel, and waits for all the promises to resolve. It returns all the values in an array.
+- If any one of the promises is rejected, it will immediately throw an error and return the same value that is returned from the error.
+
+### 2. Promise.allSettled
+- Waits for all the promises to settle and then provides the result irrespective of failure or fulfillment. 
+- It returns an array of objects.
+
+### 3. Promise.race
+- Takes a promise array but returns the result of the promise that settles (whether it rejects or fulfills) first.
+- If the first promise (the fastest one) is rejected, it will return the error or result of the first settled promise.
+
+### 4. Promise.any
+- Unlike `race`, it waits for the first promise to resolve. 
+- If all promises fail, the return result will be an aggregate error, which is an array of all the errors. 
+- AggregateError can be shown by `console.log(err.errors)`.
+
+### Example using `Promise.all`
+```javascript
+const P1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("P1 Success");
+  }, 3000);
+});
+
+const P2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject("P2 Success");
+  }, 1000);
+});
+
+const P3 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("P3 Success");
+  }, 2000);
+});
+
+Promise.all([P1, P2, P3])
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+```
+### Example using `Promise.allSettled`
+```javascript
+const P1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("P1 Success");
+  }, 3000);
+});
+
+const P2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject("P2 Failed");
+  }, 1000);
+});
+
+const P3 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("P3 Success");
+  }, 2000);
+});
+
+Promise.allSettled([P1, P2, P3])
+  .then((results) => {
+    results.forEach((result) => console.log(result));
+  });
+```
+
+### Example using `Promise.any`
+```javascript
+const P1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject("P1 Failed");
+  }, 3000);
+});
+
+const P2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject("P2 Failed");
+  }, 1000);
+});
+
+const P3 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("P3 Success");
+  }, 2000);
+});
+
+Promise.any([P1, P2, P3])
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((err) => {
+    console.log(err.errors);
+  });
+```
+
+### Example using `Promise.race`
+```javascript
+const P1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("P1 Success");
+  }, 3000);
+});
+
+const P2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject("P2 Failed");
+  }, 1000);
+});
+
+const P3 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("P3 Success");
+  }, 2000);
+});
+
+Promise.race([P1, P2, P3])
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+```
+
+These examples demonstrate how each of the Promise methods (`allSettled`, `any`, and `race`) works with a set of promises.
+
+### 5. Promise Settling
+- Remember that promises get settled. Settling can have two parts:
+  - Resolve or Reject
+  - Success or Failure
+  - Fulfilled or Rejected
+
+
+
+
+
