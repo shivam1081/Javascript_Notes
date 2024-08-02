@@ -532,6 +532,86 @@ These examples demonstrate how each of the Promise methods (`allSettled`, `any`,
   - Success or Failure
   - Fulfilled or Rejected
 
+## 6. `this` Keyword in JavaScript
+
+### 1. `this` in Global Space
+- In the global space, `this` will have the value of the global object, which is `window` in the case of a browser.
+
+### 2. `this` in Function
+- Its value is `window` in non-strict mode but not the same as the global `window`.
+- The value of `this` is different in strict and non-strict mode.
+  - Strict mode has some strict JavaScript rules.
+  - Therefore, inside the function, the value depends on strict and non-strict mode.
+- **`this` Substitution:** If the value of the `this` keyword is `undefined` or `null`, it will be replaced with the global object only in non-strict mode.
+- Essentially, the value of `this` is `undefined` in a function, but due to the above concept, it takes the global object in non-strict mode.
+- If we call normally like `x()`, then `this` will be `undefined`.
+  - But if it is called with any reference like `window.x()`, then `window` is the calling object and `this` will be the global object.
+  - `x()` => `undefined`
+  - `window.x()` => global object (`window` object)
+
+### 3. `this` in Object Method
+- **If a function is written inside an object, then it is called a method:**
+  ```javascript
+  const obj = {
+    a: 10,
+    x: function() {
+      console.log(this); // 
+    }
+  };
+  ```
+  If called like `obj.x()`, then the value of `this` becomes `obj`.
+
+### 4. Call, Apply, and Bind
+  ```javascript
+  const student = {
+    name: "Akshay",
+    printName: function() {
+      console.log(this.name);
+    }
+  };
+
+  const student2 = {
+    name: "Deepika",
+  };
+
+  student.printName.call(student2); // value of `this` = student2
+  ```
+- In the above case, the `this` keyword will take the value of the object `student2`, and in the first case, it will take the value of `student` only.
+
+### 5. `this` inside Arrow Function
+- Arrow functions do not have `this` binding. Instead, the value of the `this` keyword is the value of the enclosing lexical context.
+  ```javascript
+  const obj = {
+    a: 10,
+    x: () => {
+      console.log(this);
+    },
+  };
+
+  obj.x();
+  ```
+  In this example, the value of `this` will be the global object as it takes the value of its lexical environment in which it is closed.
+
+- In the case of nested arrow functions:
+  ```javascript
+  const obj = {
+    a: 10,
+    x: function() {
+      const y = () => {
+        console.log(this);
+      };
+
+      y();
+    },
+  };
+
+  obj.x();
+  ```
+  It will take the value of the object in which it is enclosed. In this case, the enclosing lexical context will be the function `x`.
+
+### 6. `this` inside DOM
+- It will have the value of the reference to the HTML element in which this element is enclosed.
+
 
 
 
